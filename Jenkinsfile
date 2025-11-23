@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    // loads secrets before any stages run
+    environment {
+        MY_API_KEY = credentials('my-api-key')
+    }
+
     stages {
         stage('Build') {
             steps {
@@ -8,9 +13,10 @@ pipeline {
                 echo 'Building...'
             }
         }
-        stage('Test') {
+        stage('Deploy') {
             steps {
-                echo 'Testing'
+                // automatically masks the secret in the logs
+                sh 'echo "Deployiing with API Key: $MY_API_KEY"'
             }
         }
     }
