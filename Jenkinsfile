@@ -50,9 +50,13 @@ pipeline {
         always {
             echo "Always runs"
         }
+
         failure {
-            echo "pipeline failed!"
+            mail to: 'wanyamak884@gmail.com',
+                subject: "Jenkins Gmail SMTP Test"
+                body: "If you received this email, SMTP failed!"
         }
+
         success {
             mail to: 'wanyamak884@gmail.com',
                 subject: "Jenkins Gmail SMTP Test",
