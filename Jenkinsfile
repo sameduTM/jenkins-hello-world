@@ -52,9 +52,7 @@ pipeline {
         }
 
         failure {
-            mail to: 'wanyamak884@gmail.com',
-                subject: "Jenkins Gmail SMTP Test"
-                body: "If you received this email, SMTP failed!"
+            emailext(body: 'Build Failed', to: 'wanyamak884@gmail.com', subject: 'Failed', mimeType: 'text/plain')
         }
 
         success {
