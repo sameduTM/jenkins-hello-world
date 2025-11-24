@@ -38,7 +38,7 @@ pipeline {
         stage('PUSH IMAGE') {
             steps {
                 sh """
-                    echo "${DOCKERHUB_PSW}" | docker login -u ${DOCKERHUB_USR} --password-stdin
+                    echo "${DOCKERHUB_PSW}" | docker login -u "${DOCKERHUB_USR}" --password-stdin
                     docker push ${IMAGE}:${VERSION}
                     docker push ${IMAGE}:latest
                 """
@@ -46,19 +46,32 @@ pipeline {
         }
     }
 
-    post{
+    post {
         always {
             echo "Always runs"
         }
 
         failure {
-            emailext(body: 'Build Failed', to: 'wanyamak884@gmail.com', subject: 'Failed', mimeType: 'text/plain')
+            emailext(
+                to: 'wanyamak884@gmail.com',
+                subject: "❌ Jenkins Build FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: """
+                    Build failed!
+
+                    Job: ${env.JOB_NAME}
+                    Build Number: ${env.BUILD_NUMBER}
+                    URL: ${env.BUILD_URL}
+
+                    Check Jenkins console output for details.
+                """,
+                mimeType: 'text/plain'
+            )
         }
 
         success {
             mail to: 'wanyamak884@gmail.com',
-                subject: "Jenkins Gmail SMTP Test",
-                body: "If you received this email, SMTP is working."
+                 subject: "Jenkins Gmail SMTP Test SUCCESS",
+                 body: "Good news! Your Jenkins Gmail SMTP works perfectly!"
         }
     }
 }
