@@ -52,26 +52,9 @@ pipeline {
         }
 
         failure {
-            emailext(
-                to: 'wanyamak884@gmail.com',
-                subject: "❌ Jenkins Build FAILED: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
-                body: """
-                    Build failed!
-
-                    Job: ${env.JOB_NAME}
-                    Build Number: ${env.BUILD_NUMBER}
-                    URL: ${env.BUILD_URL}
-
-                    Check Jenkins console output for details.
-                """,
-                mimeType: 'text/plain'
-            )
-        }
-
-        success {
             mail to: 'wanyamak884@gmail.com',
-                 subject: "Jenkins Gmail SMTP Test SUCCESS",
-                 body: "Good news! Your Jenkins Gmail SMTP works perfectly!"
+                 subject: "Jenkins Gmail SMTP Test FAILURE",
+                 body: "Good news! Your Jenkins Gmail SMTP failed!"
         }
     }
 }
